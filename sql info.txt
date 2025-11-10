@@ -1,0 +1,153 @@
+✅ What is SQL?
+
+SQL (Structured Query Language) is used to store, retrieve, update, and manage data in relational databases.
+
+1) JOINS in SQL
+
+A Join is used to combine rows from two or more tables based on a related column.
+
+Suppose we have two tables:
+
+Students Table:
+
+StudentID	Name	CourseID
+1	Ram	C101
+2	Rohan	C102
+3	Priya	C101
+
+Courses Table:
+
+CourseID	CourseName
+C101	DBMS
+C102	Python
+C103	Networking
+1. INNER JOIN
+
+Returns only matching records from both tables.
+
+SELECT Students.Name, Courses.CourseName
+FROM Students
+INNER JOIN Courses
+ON Students.CourseID = Courses.CourseID;
+
+
+Output:
+
+Name	CourseName
+Ram	DBMS
+Rohan	Python
+Priya	DBMS
+
+Only matched rows are shown.
+
+2. LEFT JOIN (LEFT OUTER JOIN)
+
+Returns all rows from left table and matching rows from right table.
+
+SELECT Students.Name, Courses.CourseName
+FROM Students
+LEFT JOIN Courses
+ON Students.CourseID = Courses.CourseID;
+
+
+Output is same as inner join here because all students have a course.
+
+If there was a student with no course, CourseName would show NULL.
+
+3. RIGHT JOIN (RIGHT OUTER JOIN)
+
+Returns all rows from right table and matching from left.
+
+SELECT Students.Name, Courses.CourseName
+FROM Students
+RIGHT JOIN Courses
+ON Students.CourseID = Courses.CourseID;
+
+
+Output:
+
+Name	CourseName
+Ram	DBMS
+Rohan	Python
+Priya	DBMS
+NULL	Networking
+
+Networking course has no student, so student name is NULL.
+
+4. FULL JOIN (FULL OUTER JOIN)
+
+Returns all rows, matched or unmatched.
+
+SELECT Students.Name, Courses.CourseName
+FROM Students
+FULL JOIN Courses
+ON Students.CourseID = Courses.CourseID;
+
+
+Shows everything with NULL where matching data is missing.
+
+5. CROSS JOIN
+
+Returns cartesian product (every row of table1 × every row of table2)
+
+SELECT Students.Name, Courses.CourseName
+FROM Students
+CROSS JOIN Courses;
+
+
+If 3 students and 3 courses → Output will be 9 rows.
+
+2) SUBQUERIES in SQL
+
+A Subquery is a query inside another query.
+
+Example Table:
+
+Employees
+
+EmpID	Name	Salary	DeptID
+1	Amit	50000	10
+2	Sana	60000	20
+3	Ravi	40000	10
+
+Departments
+
+DeptID	DeptName
+10	Sales
+20	HR
+1. Subquery in WHERE Clause
+
+Find employee(s) with maximum salary.
+
+SELECT Name, Salary
+FROM Employees
+WHERE Salary = (SELECT MAX(Salary) FROM Employees);
+
+2. Subquery in SELECT Clause
+
+Show salary difference from highest salary.
+
+SELECT Name, Salary, 
+       (SELECT MAX(Salary) FROM Employees) - Salary AS SalaryDiff
+FROM Employees;
+
+3. Subquery in FROM Clause (Inline View)
+SELECT AVG(Salary) AS AvgSalary
+FROM (SELECT Salary FROM Employees WHERE DeptID = 10) AS SalesEmployees;
+
+4. Subquery with IN
+
+List employees working in Sales department.
+
+SELECT Name
+FROM Employees
+WHERE DeptID IN (SELECT DeptID FROM Departments WHERE DeptName = 'Sales');
+
+⭐ Summary Table
+Concept	Meaning	Example
+INNER JOIN	Only matched data	Students + Courses
+LEFT JOIN	All left + matched right	All students even if no course
+RIGHT JOIN	All right + matched left	All courses even if no student
+FULL JOIN	All records both sides	Full dataset
+CROSS JOIN	Every combination	3x3 = 9 results
+Subquery	Query inside query	Used in WHERE, FROM, SELECT
