@@ -1,0 +1,45 @@
+C:\Windows\system32>sqlplus system/password
+
+SQL*Plus: Release 21.0.0.0.0 - Production
+
+SQL> CREATE TABLE Stud(
+  2  Roll NUMBER PRIMARY KEY,
+  3  Att NUMBER,
+  4  Status CHAR(2)
+  5  );
+Table created.
+
+SQL> INSERT INTO Stud VALUES (1, 85, NULL);
+SQL> INSERT INTO Stud VALUES (2, 60, NULL);
+SQL> INSERT INTO Stud VALUES (3, 75, NULL);
+SQL> INSERT INTO Stud VALUES (4, 50, NULL);
+SQL> COMMIT;
+Commit complete.
+
+SQL> SET SERVEROUTPUT ON;
+
+SQL> DECLARE
+  2    v_roll NUMBER := &Roll;
+  3    v_att Stud.Att%TYPE;
+  4  BEGIN
+  5    SELECT Att INTO v_att FROM Stud WHERE Roll = v_roll;
+  6
+  7    IF v_att < 75 THEN
+  8         UPDATE Stud SET Status = 'D' WHERE Roll = v_roll;
+  9         DBMS_OUTPUT.PUT_LINE('Term not granted');
+ 10    ELSE
+ 11         UPDATE Stud SET Status = 'ND' WHERE Roll = v_roll;
+ 12         DBMS_OUTPUT.PUT_LINE('Term granted');
+ 13    END IF;
+ 14
+ 15  EXCEPTION
+ 16    WHEN NO_DATA_FOUND THEN
+ 17         DBMS_OUTPUT.PUT_LINE('Roll number not found!');
+ 18  END;
+ 19  /
+Enter value for roll: 2
+Term not granted
+
+PL/SQL procedure successfully completed.
+
+SQL> SELECT * FROM Stud;

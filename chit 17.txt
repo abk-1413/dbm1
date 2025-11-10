@@ -1,0 +1,83 @@
+
+mysql> create database EmpDB;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use EmpDB;
+Database changed
+
+mysql> create table Employee(Eid int primary key,EName varchar(50),Address varchar(50),Salary int,Commission int);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into Employee values
+(1,'Amit','Pune',35000,5000),
+(2,'Sneha','Pune',25000,NULL),
+(3,'Savita','Nasik',28000,2000),
+(4,'Pooja','Mumbai',19000,NULL),
+(5,'Sagar','Mumbai',25000,3000);
+Query OK, 5 rows affected (0.01 sec)
+
+mysql> create table Project(PrNo int,PrAdd varchar(50));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> insert into Project values
+(10,'Mumbai'),
+(20,'Pune'),
+(30,'Nasik');
+Query OK, 3 rows affected (0.01 sec)
+
+1. Find different locations from where employees belong
+mysql> select distinct Address from Employee;
++---------+
+| Address |
++---------+
+| Pune    |
+| Nasik   |
+| Mumbai  |
++---------+
+3 rows in set (0.00 sec)
+
+2. What is maximum and minimum salary?
+mysql> select max(Salary), min(Salary) from Employee;
++-------------+-------------+
+| max(Salary) | min(Salary) |
++-------------+-------------+
+|       35000 |       19000 |
++-------------+-------------+
+1 row in set (0.00 sec)
+
+3. Display employees in ascending order of salary
+mysql> select * from Employee order by Salary asc;
+
+4. Employees who live in Nasik or Pune
+mysql> select EName from Employee where Address in ('Nasik','Pune');
+
+5. Employees who do not get commission
+mysql> select EName from Employee where Commission is NULL;
+
+6. Change city of Amit to Nashik
+mysql> update Employee set Address='Nashik' where EName='Amit';
+Query OK, 1 row affected (0.01 sec)
+
+7. Employees whose name starts with 'A'
+mysql> select * from Employee where EName like 'A%';
+
+8. Count staff from Mumbai
+mysql> select count(*) from Employee where Address='Mumbai';
+
+9. Count staff from each city
+mysql> select Address, count(*) from Employee group by Address;
+
+10. Find address of employees & project locations
+mysql> select Address from Employee
+union
+select PrAdd from Project;
+
+11. City-wise minimum salary
+mysql> select Address, min(Salary) from Employee group by Address;
+
+12. City-wise maximum salary greater than 26000
+mysql> select Address, max(Salary) from Employee group by Address having max(Salary)>26000;
+
+13. Delete employee having salary greater than 30000
+mysql> delete from Employee where Salary>30000;
+Query OK, 1 row affected (0.01 sec)
